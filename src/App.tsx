@@ -1,35 +1,23 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import { RouterProvider } from "react-router-dom";
+import { router } from "./router";
+import { useTenant } from "./providers/TenantProvider";
 
-function App() {
-  const [count, setCount] = useState(0)
-
+export function App() {
+  const tenant = useTenant();
   return (
-    <>
-      <div>
-        <a href="https://vite.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.tsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
-  )
+    <div className="min-h-screen">
+      <header className="flex items-center justify-between p-4 border-b">
+        <div className="flex items-center gap-3">
+          {tenant.assets?.logo && (
+            <img src={`/${tenant.assets.logo}`} className="h-8" />
+          )}
+          <h1 className="font-semibold">{tenant.displayName}</h1>
+        </div>
+        <span className="text-sm opacity-70">Tenant: {tenant.id}</span>
+      </header>
+      <main className="p-4">
+        <RouterProvider router={router} />
+      </main>
+    </div>
+  );
 }
-
-export default App

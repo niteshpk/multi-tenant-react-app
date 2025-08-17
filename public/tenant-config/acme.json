@@ -1,0 +1,11 @@
+{
+  "id": "acme",
+  "displayName": "ACME Health",
+  "theme": { "package": "tenants/acme/theme.css" },
+  "assets": { "logo": "logo.svg", "favicon": "favicon.ico" },
+  "locale": "en-SG",
+  "i18nBundleUrl": "/i18n/acme.json",
+  "flags": { "devices.fitbit": true, "modules.programBuilder": "beta" },
+  "permissions": ["patient.read", "program.write"],
+  "routes": { "home": "/dashboard" }
+}

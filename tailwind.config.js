@@ -1,9 +1,13 @@
-/** @type {import('tailwindcss').Config} */
+import type { Config } from 'tailwindcss';
+
 export default {
-  content: [],
+  content: ['./index.html', './src/**/*.{ts,tsx}'],
   theme: {
-    extend: {},
+    extend: {
+      borderRadius: {
+        lg: 'var(--radius-lg, 12px)',
+      },
+    },
   },
   plugins: [],
-}
-
+} satisfies Config;

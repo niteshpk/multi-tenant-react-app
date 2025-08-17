@@ -1,0 +1,11 @@
+{
+  "id": "default",
+  "displayName": "Default Tenant",
+  "theme": { "package": "tenants/default/theme.css" },
+  "assets": { "logo": "logo.svg" },
+  "locale": "en",
+  "i18nBundleUrl": "/i18n/default.json",
+  "flags": { "devices.fitbit": true, "modules.programBuilder": false },
+  "permissions": ["patient.read"],
+  "routes": { "home": "/dashboard" }
+}
