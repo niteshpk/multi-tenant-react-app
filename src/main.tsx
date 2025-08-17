@@ -10,24 +10,28 @@ import { FeatureFlagProvider } from "./providers/FeatureFlagProvider";
 import { I18nProvider } from "./providers/I18nProvider";
 import { App } from "./App";
 
-function resolveTenantFromLocation(): string {
-  const subdomain = window.location.hostname.split(".")[0];
-  if (subdomain && subdomain !== "localhost") return subdomain;
-  const m = window.location.pathname.match(/^\/t\/([a-z0-9-]+)/i);
-  return m?.[1] ?? "default";
+function resolveTenantAndBasename() {
+  // path-based: /t/:tenant/...
+  const m = window.location.pathname.match(/^\/t\/([a-z0-9-]+)(?:\/|$)/i);
+  if (m) return { tenantId: m[1], basename: `/t/${m[1]}` };
+
+  // subdomain-based: tenant.example.com
+  const sub = window.location.hostname.split(".")[0];
+  if (sub && sub !== "localhost") return { tenantId: sub, basename: undefined };
+
+  return { tenantId: "default", basename: undefined };
 }
 
 async function loadTenantConfig(id: string): Promise<TenantConfig> {
   const res = await fetch(`/tenant-config/${id}.json`, { cache: "no-store" });
   if (!res.ok)
     throw new Error(`Failed to load tenant config ${id}: ${res.status}`);
-
   const json = await res.json();
   return TenantConfigSchema.parse(json);
 }
 
 (async function bootstrap() {
-  const tenantId = resolveTenantFromLocation();
+  const { tenantId, basename } = resolveTenantAndBasename();
   const cfg = await loadTenantConfig(tenantId);
 
   ReactDOM.createRoot(document.getElementById("root")!).render(
@@ -35,7 +39,7 @@ async function loadTenantConfig(id: string): Promise<TenantConfig> {
       <TenantProvider value={cfg}>
         <FeatureFlagProvider flags={cfg.flags}>
           <I18nProvider locale={cfg.locale} messagesUrl={cfg.i18nBundleUrl}>
-            <App />
+            <App basename={basename} />
           </I18nProvider>
         </FeatureFlagProvider>
       </TenantProvider>

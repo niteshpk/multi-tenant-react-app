@@ -1,9 +1,12 @@
+import React from "react";
 import { RouterProvider } from "react-router-dom";
-import { router } from "./router";
 import { useTenant } from "./providers/TenantProvider";
+import { createAppRouter } from "./router";
 
-export function App() {
+export function App({ basename }: { basename?: string }) {
   const tenant = useTenant();
+  const router = React.useMemo(() => createAppRouter(basename), [basename]);
+
   return (
     <div className="min-h-screen">
       <header className="flex items-center justify-between p-4 border-b">

@@ -1,17 +1,17 @@
 import React from "react";
-import { useTenant } from "../../providers/TenantProvider";
+// import { useTenant } from "../../providers/TenantProvider";
 import { loadOverride } from "../../lib/dynamicOverride";
 
 type Props = { title: string; description?: string };
 
 export default function ProgramCard(props: Props) {
-  const tenant = useTenant();
+  // const tenant = useTenant();
   const [Override, setOverride] =
     React.useState<React.ComponentType<Props> | null>(null);
 
   React.useEffect(() => {
     let active = true;
-    loadOverride<React.ComponentType<Props>>(tenant.id, "ProgramCard").then(
+    loadOverride<React.ComponentType<Props>>({ ...props }, "ProgramCard").then(
       (Comp) => {
         if (active) setOverride(Comp);
       }
@@ -19,7 +19,7 @@ export default function ProgramCard(props: Props) {
     return () => {
       active = false;
     };
-  }, [tenant.id]);
+  }, [props]);
 
   const Base = (
     <div className="card">
